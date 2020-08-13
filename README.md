@@ -1,5 +1,5 @@
 ### Description:
-In this application for security practice
+This application was build for security practice
 
 ### How to use in console:
 yarn start 

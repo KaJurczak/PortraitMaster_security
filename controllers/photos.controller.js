@@ -11,9 +11,16 @@ exports.add = async (req, res) => {
     if(title && author && email && file) { // if fields are not empty...
 
       const fileName = file.path.split('/').slice(-1)[0]; // cut only filename from full path, e.g. C:/test/abc.jpg -> abc.jpg
-      const newPhoto = new Photo({ title, author, email, src: fileName, votes: 0 });
-      await newPhoto.save(); // ...save new photo in DB
-      res.json(newPhoto);
+      const fileExt = fileName.split('.').slice(-1)[0]; // cut extension
+      if(title.length <= 25 && author.length <= 50 && (fileExt == 'gif' || fileExt == 'jpg' || fileExt == 'png')){
+
+        let isHTML = RegExp.prototype.test.bind(/(<([^>]+)>)/i);
+        let isEmail = RegExp.prototype.test.bind(/^\S+@\S+\.\S+$/);
+        if(isHTML(title) === false && isEmail(email) === true){
+          const newPhoto = new Photo({ title, author, email, src: fileName, votes: 0 });
+          await newPhoto.save(); // ...save new photo in DB
+          res.json(newPhoto);
+      }}
 
     } else {
       throw new Error('Wrong input!');
